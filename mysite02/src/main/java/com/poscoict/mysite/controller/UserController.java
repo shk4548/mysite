@@ -1,10 +1,15 @@
 package com.poscoict.mysite.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.poscoict.mysite.mvc.user.UserActionFactory;
+import com.poscoict.web.mvc.Action;
+import com.poscoict.web.mvc.ActionFactory;
 
 
 public class UserController extends HttpServlet {
@@ -15,13 +20,10 @@ public class UserController extends HttpServlet {
 		
 		String actionName = request.getParameter("a");
 		
-		if("joinform".equals(actionName)) {
-			
-		}else if("join".equals(actionName)) {
-			
-		} else {
-			
-		}
+		ActionFactory af = new UserActionFactory();
+		Action action = af.getAction(actionName); // user와 관련된 actionfactory 메서드
+		action.execute(request, response);
+		
 	}
 
 
