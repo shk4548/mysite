@@ -102,18 +102,44 @@ public class UserDao {
 		
 		try {
 			conn = getConnection();
+			String sql = "";
+			if(vo.getPassword() == "") {
+				sql = "update user set name =? , gender = ? where no = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getGender());
+				pstmt.setLong(3, vo.getNo());
+				
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+			}else if (vo.getName() == "") {
+				sql = "update user set password=? , gender = ? where no = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, vo.getPassword());
+				pstmt.setString(2, vo.getGender());
+				pstmt.setLong(3, vo.getNo());
+				
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+			}else {
+				sql = "update user set name = ? ,password=? , gender = ? where no = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getPassword());
+				pstmt.setString(3, vo.getGender());
+				pstmt.setLong(4, vo.getNo());
+				
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+			}
+			
 		
-			String sql= 
-					"update user set name =? , password =?, gender = ? where no = ? ";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPassword());
-			pstmt.setString(3, vo.getGender());
-			pstmt.setLong(4, vo.getNo());
-			
-			int count = pstmt.executeUpdate();
-			result = count == 1;
 			
 		} catch (SQLException e) {
 			System.out.println("error:" + e);

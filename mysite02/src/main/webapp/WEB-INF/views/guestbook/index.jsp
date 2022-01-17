@@ -10,14 +10,14 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%=request.getContextPath() %>/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath }/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
-				<form action="<%=request.getContextPath() %>/guestbook" method="post">
+				<form action="${pageContext.request.contextPath }/guestbook" method="post">
 					<input type="hidden" name="a" value="insert">
 					<table>
 						<tr>
@@ -40,7 +40,7 @@
 									<td>${vo.no }</td>
 									<td>${vo.name }</td>
 									<td>${vo.regDate}</td>
-									<td><a href="<%=request.getContextPath() %>/guestbook?a=deleteform&no=${vo.no}">삭제</a></td>
+									<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no}">삭제</a></td>
 								</tr>
 								<tr>
 									<td colspan=4>${fn:replace(vo.message, newline, "<br/>") }</td>
