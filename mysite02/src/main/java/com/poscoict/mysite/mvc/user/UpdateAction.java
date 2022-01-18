@@ -17,21 +17,32 @@ public class UpdateAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 접근 제어 
+		
+		HttpSession session = request.getSession();
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		
+		if(authUser == null ) {
+			MvcUtil.forward("user/loginform", request, response);
+			return; // 없으면 여기서 끝내야함 
+		}
+		
+
+		
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String gender = request.getParameter("gender");
 		
 		
-		HttpSession session = request.getSession();
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
 
-		authUser.setName(name);
-		authUser.setEmail(email);
-		authUser.setPassword(password);
-		authUser.setGender(gender);
+
+		UserVo userVo = new UserVo();
+		userVo.setEmail(email);
+		userVo.setName(name);
+		userVo.setPassword(password);
+		userVo.setGender(gender);		
 		
-		boolean vo = new UserDao().update(authUser);  // 회원 정보 수정!
+		boolean vo = new UserDao().update(userVo);  // 회원 정보 수정!
 		
 		if(vo) {
 			MvcUtil.redirect(request.getContextPath(), request, response);

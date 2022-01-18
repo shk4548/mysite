@@ -13,7 +13,7 @@
 			<div id="content">
 				<div id="site-introduction">
 					<img id="profile" src="${pageContext.request.contextPath}/assets/images/dog3.jpg" style='width:200px'>
-					<h2>안녕하세요. 나가주세요.</h2>
+					<h2>안녕하세요. 김선혁 게시판입니다</h2>
 					<p>
 						졸리고<br>
 						배고파요<br><br>
