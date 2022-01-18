@@ -27,17 +27,14 @@ public class UpdateAction implements Action {
 		}
 		
 
-		
+		Long no = Long.parseLong(request.getParameter("no"));
 		String name = request.getParameter("name");
-		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String gender = request.getParameter("gender");
 		
-		
-
-
+	
 		UserVo userVo = new UserVo();
-		userVo.setEmail(email);
+		userVo.setNo(no);
 		userVo.setName(name);
 		userVo.setPassword(password);
 		userVo.setGender(gender);		

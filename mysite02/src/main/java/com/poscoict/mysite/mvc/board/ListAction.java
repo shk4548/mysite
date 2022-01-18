@@ -1,16 +1,15 @@
 package com.poscoict.mysite.mvc.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.poscoict.mysite.dao.BoardDao;
 import com.poscoict.mysite.vo.BoardVo;
-import com.poscoict.mysite.vo.UserVo;
 import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
@@ -27,12 +26,11 @@ public class ListAction implements Action {
 //		
 //		Map m;
 //		m.put();
-		HttpSession session = request.getSession();
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		
-		
+
 		BoardDao dao = new BoardDao();
-		List<BoardVo> list = dao.findall();
+		List<BoardVo> list = new ArrayList<>();
+		
+		list = dao.findall();
 		request.setAttribute("list", list);
 		
 		MvcUtil.forward("board/list", request, response);

@@ -13,29 +13,29 @@ import com.poscoict.mysite.vo.UserVo;
 import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
-public class UpdateAction implements Action {
+public class DeleteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		
-		
-		String no = request.getParameter("no");
-		Long num = Long.parseLong(no);
-		String title = request.getParameter("title");
-		String contents = request.getParameter("contents");
-		
-		
-		BoardVo vo = new BoardVo();
-		vo.setNo(num);
-		vo.setTitle(title);
-		vo.setContents(contents);
-				
-		BoardDao dao = new BoardDao();
-		boolean update = dao.update(vo);
-		if(update) {
-		MvcUtil.redirect(request.getContextPath()+"/board?a=view&no="+ num, request, response);
+		if(authUser == null) {
+			MvcUtil.redirect(request.getContextPath() + "/board", request, response);
+			return ;
 		}
+		
+		String num = request.getParameter("no");
+		Long no = Long.parseLong(num);
+		
+		BoardVo vo = new BoardDao().listone(no);
+		BoardDao dao = new BoardDao();
+		
+		
+		if (authUser.getNo() == vo.getUserNo()) {
+			dao.delete(no);
+		}
+		MvcUtil.redirect(request.getContextPath()+"/board", request, response);
 	}
+
 }

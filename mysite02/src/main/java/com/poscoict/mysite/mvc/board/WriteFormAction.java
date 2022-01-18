@@ -15,8 +15,7 @@ public class WriteFormAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+
 		
 		MvcUtil.forward("board/write", request, response);
 	}

@@ -1,33 +1,32 @@
 package com.poscoict.mysite.mvc.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.poscoict.mysite.dao.BoardDao;
 import com.poscoict.mysite.vo.BoardVo;
-import com.poscoict.mysite.vo.UserVo;
 import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
-public class UpdateFormAction implements Action {
+public class SearchAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		String keyword = request.getParameter("kwd");
 		
+		BoardDao dao = new BoardDao();
+		List<BoardVo> list = new ArrayList<>();
 		
-		String no = request.getParameter("no");
-		Long num = Long.parseLong(no);
+		list = dao.search(keyword);
+		request.setAttribute("list", list);
 		
-		BoardVo vo = new BoardDao().findByNo(num);
-		request.setAttribute("vo", vo);
-		MvcUtil.forward("board/modify", request, response);
-
+		MvcUtil.forward("board/list", request, response);
+		
 	}
 
 }

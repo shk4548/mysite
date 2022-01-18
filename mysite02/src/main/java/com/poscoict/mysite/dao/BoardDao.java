@@ -82,7 +82,7 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "select no, title, contents from board where no =" + no;
+			String sql = "select no, title, contents, user_no from board where no =" + no;
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -93,6 +93,7 @@ public class BoardDao {
 				vo.setNo(rs.getLong(1));
 				vo.setTitle(rs.getString(2));
 				vo.setContents(rs.getString(3));
+				vo.setUserNo(rs.getLong(4));
 			}
 
 		} catch (SQLException e) {
@@ -238,7 +239,7 @@ public class BoardDao {
 		return list;
 	}
 
-	public boolean delete(int no) {
+	public boolean delete(Long no) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -250,6 +251,9 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);
+			
+			int count = pstmt.executeUpdate();
+			result = count == 1;
 
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
