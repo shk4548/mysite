@@ -74,7 +74,6 @@ public class BoardDao {
 		return list;
 	}
 
-
 	public boolean insert(BoardVo vo) {
 		boolean result = false;
 
@@ -114,7 +113,7 @@ public class BoardDao {
 		return result;
 	}
 
-	public boolean reply(BoardVo vo) {
+	public boolean replyWrite(BoardVo vo) {
 		boolean result = false;
 
 		Connection conn = null;
@@ -122,11 +121,19 @@ public class BoardDao {
 
 		try {
 			conn = getConnection();
-
-			String sql = "";
+			
+			String sql = "Insert into board values(null ,?,?,0, ?  "
+					+ ", ? , ?, now() , ?);";
 
 			pstmt = conn.prepareStatement(sql);
-
+			
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setInt(3, vo.getGroupNo());
+			pstmt.setInt(4, vo.getOrderNo());
+			pstmt.setInt(5, vo.getDepth());
+			pstmt.setLong(6, vo.getUserNo());
+			
 			int count = pstmt.executeUpdate();
 			result = count == 1;
 
@@ -148,8 +155,7 @@ public class BoardDao {
 		return result;
 	}
 
-
-	public List<BoardVo> search(String keyword){
+	public List<BoardVo> search(String keyword) {
 		List<BoardVo> list = new ArrayList<>();
 
 		Connection conn = null;
@@ -159,9 +165,9 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql =  "select a.*,b.name from board as a join user as b on a.user_no"
-					+ " = b.no where a.title like '%" + keyword + "%' or"
-					+ " b.name like '%" + keyword + "%' order by g_no desc, o_no asc";
+			String sql = "select a.*,b.name from board as a join user as b on a.user_no"
+					+ " = b.no where a.title like '%" + keyword + "%' or" + " b.name like '%" + keyword
+					+ "%' order by g_no desc, o_no asc";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -202,11 +208,8 @@ public class BoardDao {
 		}
 
 		return list;
-	}	
-		
-		
-		
-	
+	}
+
 	public boolean delete(Long no) {
 		boolean result = false;
 		Connection conn = null;
@@ -219,7 +222,7 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);
-			
+
 			int count = pstmt.executeUpdate();
 			result = count == 1;
 
@@ -251,7 +254,8 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "select title, contents, user_no, hit, g_no, o_no, depth from board where no = ?";
+			String sql = "select title, contents,  hit, g_no, o_no, depth, reg_date ,user_no, b.name from board as a join user as \r\n"
+					+ "b on a.user_no = b.no where a.no = ? order by g_no desc, o_no asc ;";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);
@@ -261,23 +265,26 @@ public class BoardDao {
 			if (rs.next()) {
 				String title = rs.getString(1);
 				String contents = rs.getString(2);
-				Long userNo = rs.getLong(3);
-				int hit = rs.getInt(4);
-				int groupNo = rs.getInt(5);
-				int orderNo = rs.getInt(6);
-				int depth = rs.getInt(7);
-				
+				int hit = rs.getInt(3);
+				int groupNo = rs.getInt(4);
+				int orderNo = rs.getInt(5);
+				int depth = rs.getInt(6);
+				String regDate = rs.getString(7);
+				Long userNo = rs.getLong(8);
+				String userName = rs.getString(9);
+
 				result = new BoardVo();
 
-			
 				result.setNo(no);
 				result.setTitle(title);
 				result.setContents(contents);
-				result.setUserNo(userNo);
 				result.setHit(hit);
 				result.setGroupNo(groupNo);
 				result.setOrderNo(orderNo);
 				result.setDepth(depth);
+				result.setRegDate(regDate);
+				result.setUserNo(userNo);
+				result.setUserName(userName);
 
 			}
 
@@ -298,22 +305,23 @@ public class BoardDao {
 
 		return result;
 	}
+
 	public boolean updateHit(int cnt, long no) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = getConnection();
 			String sql = "update board set hit = ? where no = ?";
-			
+
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,cnt);
+			pstmt.setInt(1, cnt);
 			pstmt.setLong(2, no);
-			
+
 			int count = pstmt.executeUpdate();
 			result = count == 1;
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
 			try {
@@ -330,6 +338,44 @@ public class BoardDao {
 
 		return result;
 	}
+
+	public boolean updateReply(int orderno , int groupno) {
+		boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = getConnection();
+
+			String sql = "update board set o_no = (o_no + 1) where"
+
+					+ " o_no > ? and g_no = ?";
+
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, orderno);
+			pstmt.setInt(2, groupno);
+			
+			int count = pstmt.executeUpdate();
+			result = count == 1;
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
 
 	public boolean update(BoardVo vo) {
 		boolean result = false;

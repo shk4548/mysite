@@ -29,6 +29,7 @@ public class ViewAction implements Action {
 			Cookie[] cookies = request.getCookies();
 			Cookie viewCookie = null;
 
+			
 			if (cookies != null && cookies.length > 0) {
 				for (Cookie cookie : cookies) {
 					if (no.equals(cookie.getName())) {
