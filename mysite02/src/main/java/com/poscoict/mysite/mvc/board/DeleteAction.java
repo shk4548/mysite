@@ -24,18 +24,17 @@ public class DeleteAction implements Action {
 			MvcUtil.redirect(request.getContextPath() + "/board", request, response);
 			return ;
 		}
+	
+		Long no = Long.parseLong(request.getParameter("no"));
 		
-		String num = request.getParameter("no");
-		Long no = Long.parseLong(num);
-		
-		BoardVo vo = new BoardDao().listone(no);
+		BoardVo vo = new BoardVo();
 		BoardDao dao = new BoardDao();
 		
+		boolean delete = dao.delete(no);
 		
-		if (authUser.getNo() == vo.getUserNo()) {
-			dao.delete(no);
+		if(delete) {
+			MvcUtil.redirect(request.getContextPath()+"/board", request, response);
 		}
-		MvcUtil.redirect(request.getContextPath()+"/board", request, response);
 	}
 
 }

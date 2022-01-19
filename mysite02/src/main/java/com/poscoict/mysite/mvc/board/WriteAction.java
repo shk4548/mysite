@@ -27,10 +27,11 @@ public class WriteAction implements Action {
 		vo.setContents(contents);
 		vo.setUserNo(userNo);
 		
-		dao.insert(vo);
+		boolean insert = dao.insert(vo);
 		
-		
-		MvcUtil.redirect(request.getContextPath()+"/board", request, response);
+		if(insert) {
+			MvcUtil.redirect(request.getContextPath()+"/board", request, response);
+		}
 		
 	}
 

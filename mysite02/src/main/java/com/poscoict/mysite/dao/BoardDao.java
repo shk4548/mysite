@@ -74,45 +74,6 @@ public class BoardDao {
 		return list;
 	}
 
-	public BoardVo listone(long no) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		BoardVo vo = null;
-		try {
-			conn = getConnection();
-
-			String sql = "select no, title, contents, user_no from board where no =" + no;
-
-			pstmt = conn.prepareStatement(sql);
-
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				vo = new BoardVo();
-				vo.setNo(rs.getLong(1));
-				vo.setTitle(rs.getString(2));
-				vo.setContents(rs.getString(3));
-				vo.setUserNo(rs.getLong(4));
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return vo;
-	}
 
 	public boolean insert(BoardVo vo) {
 		boolean result = false;
@@ -187,7 +148,8 @@ public class BoardDao {
 		return result;
 	}
 
-	public List<BoardVo> search(String keyword) {
+
+	public List<BoardVo> search(String keyword){
 		List<BoardVo> list = new ArrayList<>();
 
 		Connection conn = null;
@@ -197,7 +159,9 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "select * from board where title like '%" + keyword + "%' order by g_no desc, o_no asc";
+			String sql =  "select a.*,b.name from board as a join user as b on a.user_no"
+					+ " = b.no where a.title like '%" + keyword + "%' or"
+					+ " b.name like '%" + keyword + "%' order by g_no desc, o_no asc";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -217,6 +181,7 @@ public class BoardDao {
 				vo.setDepth(rs.getInt(7));
 				vo.setRegDate(rs.getString(8));
 				vo.setUserNo(rs.getLong(9));
+				vo.setUserName(rs.getString(10));
 
 				list.add(vo);
 			}
@@ -237,8 +202,11 @@ public class BoardDao {
 		}
 
 		return list;
-	}
-
+	}	
+		
+		
+		
+	
 	public boolean delete(Long no) {
 		boolean result = false;
 		Connection conn = null;
@@ -247,7 +215,7 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "delete from content where no = ?";
+			String sql = "delete from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);
@@ -273,7 +241,7 @@ public class BoardDao {
 		return result;
 	}
 
-	public BoardVo findByNo(Long num) {
+	public BoardVo findByNo(Long no) {
 		BoardVo result = null;
 
 		Connection conn = null;
@@ -283,22 +251,33 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "select no,title,contents from board where no = ?";
+			String sql = "select title, contents, user_no, hit, g_no, o_no, depth from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setLong(1, num);
+			pstmt.setLong(1, no);
 
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String contents = rs.getString(3);
-
+				String title = rs.getString(1);
+				String contents = rs.getString(2);
+				Long userNo = rs.getLong(3);
+				int hit = rs.getInt(4);
+				int groupNo = rs.getInt(5);
+				int orderNo = rs.getInt(6);
+				int depth = rs.getInt(7);
+				
 				result = new BoardVo();
+
+			
 				result.setNo(no);
 				result.setTitle(title);
 				result.setContents(contents);
+				result.setUserNo(userNo);
+				result.setHit(hit);
+				result.setGroupNo(groupNo);
+				result.setOrderNo(orderNo);
+				result.setDepth(depth);
 
 			}
 
@@ -307,6 +286,38 @@ public class BoardDao {
 		} finally {
 			try {
 				if (rs != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+	public boolean updateHit(int cnt, long no) {
+		boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			String sql = "update board set hit = ? where no = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,cnt);
+			pstmt.setLong(2, no);
+			
+			int count = pstmt.executeUpdate();
+			result = count == 1;
+		}catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if (pstmt != null) {
 					pstmt.close();
 				}
 				if (conn != null) {

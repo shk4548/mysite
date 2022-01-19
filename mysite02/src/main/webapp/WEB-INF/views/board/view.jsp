@@ -27,7 +27,7 @@
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${vo.contents }
+								${fn:replace(vo.contents, newline, "<br/>") }
 							</div>
 						</td>
 					</tr>
@@ -35,6 +35,7 @@
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath}/board">글목록</a>
 					<c:if test="${vo.userNo == authUser.no }">
+					<a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no }">글삭제</a>
 					<a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no }">글수정</a>
 					</c:if>
 				</div>

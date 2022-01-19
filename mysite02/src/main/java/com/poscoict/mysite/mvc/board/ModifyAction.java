@@ -30,6 +30,7 @@ public class ModifyAction implements Action {
 				
 		BoardDao dao = new BoardDao();
 		boolean update = dao.update(vo);
+		
 		if(update) {
 		MvcUtil.redirect(request.getContextPath()+"/board?a=view&no="+ no, request, response);
 		}
