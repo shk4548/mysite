@@ -13,7 +13,7 @@ import com.poscoict.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
 public class ViewAction implements Action {
-	private static final int COOKIE_LIFETIME = 10;
+	private static final int COOKIE_LIFETIME = 600; // 10분으로 설정
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

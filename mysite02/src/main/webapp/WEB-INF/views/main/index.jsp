@@ -15,8 +15,8 @@
 					<img id="profile" src="${pageContext.request.contextPath}/assets/images/dog3.jpg" style='width:200px'>
 					<h2>안녕하세요. 김선혁 게시판입니다</h2>
 					<p>
-						졸리고<br>
-						배고파요<br><br>
+						반갑습니다<br>
+						<br><br>
 						<a href="${pageContext.request.contextPath}/guestbook">방명록</a>에 글 남기기<br>
 					</p>
 				</div>
