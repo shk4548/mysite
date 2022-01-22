@@ -254,7 +254,7 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "select title, contents,  hit, g_no, o_no, depth, reg_date ,user_no, b.name from board as a join user as \r\n"
+			String sql = "select title, contents,  hit, g_no, o_no, depth, a.reg_date ,user_no, b.name from board as a join user as \r\n"
 					+ "b on a.user_no = b.no where a.no = ? order by g_no desc, o_no asc ;";
 			pstmt = conn.prepareStatement(sql);
 
