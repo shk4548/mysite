@@ -96,4 +96,10 @@ public class UserController {
 		userService.updateUser(userVo);
 		return "redirect:/user/update";
 	}
+	
+	// Exception 처리
+//	@ExceptionHandler( Exception.class )
+//	public String UserControllerExceptionHandler() {
+//		return "error/exception";
+//	}
 }

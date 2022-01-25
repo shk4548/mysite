@@ -7,7 +7,7 @@
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/assets/css/user.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
@@ -15,11 +15,8 @@
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="updateform" method="post" action="${pageContext.request.contextPath}/user"> <%-- parameter 랑은 다름 url 포함 --%>
+				<form id="join-form" name="updateform" method="post" action="<%=request.getContextPath()%>/user"> <%-- parameter 랑은 다름 url 포함 --%>
 					<input type = 'hidden' name="a" value="update"/>
-					<input type="hidden" name="no" value="${userVo.no }">
-					
-					
 					<label class="block-label" for="name">이름</label> <!-- vo.getName -->
 					<input id="name" name="name" type="text" value="${userVo.name }">
 					<label class="block-label" for="email">이메일 (변경 불가 )</label>
