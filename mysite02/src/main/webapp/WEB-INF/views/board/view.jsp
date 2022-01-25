@@ -1,63 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="/assets/css/user.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1>MySite</h1>
-			<ul>
-				<li><a href="">로그인</a><li>
-				<li><a href="">회원가입</a><li>
-				<li><a href="">회원정보수정</a><li>
-				<li><a href="">로그아웃</a><li>
-				<li>님 안녕하세요 ^^;</li>
-			</ul>
-		</div>
-		<div id="content">
-			<div id="user">
+   <div id="container">
+      <jsp:include page="/WEB-INF/views/includes/header.jsp" />
 
-				<form id="join-form" name="joinForm" method="" action="">
-					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
-
-					<label class="block-label" for="email">이메일</label>
-					<input id="email" name="email" type="text" value="">
-					<input type="button" value="id 중복체크">
-					
-					<label class="block-label">패스워드</label>
-					<input name="password" type="password" value="">
-					
-					<fieldset>
-						<legend>성별</legend>
-						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
-						<label>남</label> <input type="radio" name="gender" value="male">
-					</fieldset>
-					
-					<fieldset>
-						<legend>약관동의</legend>
-						<input id="agree-prov" type="checkbox" name="agreeProv" value="y">
-						<label>서비스 약관에 동의합니다.</label>
-					</fieldset>
-					
-					<input type="submit" value="가입하기">
-					
-				</form>
-			</div>
-		</div>
-		<div id="navigation">
-			<ul>
-				<li><a href="">안대혁</a></li>
-				<li><a href="">방명록</a></li>
-				<li><a href="">게시판</a></li>
-			</ul>
-		</div>
-		<div id="footer">
-			<p>(c)opyright 2015, 2016, 2017, 2018</p>
-		</div>
-	</div>
+      <div id="content">
+         <div id="board" class="board-form">
+            <table class="tbl-ex">
+               <tr>
+                  <th colspan="2">글보기</th>
+               </tr>
+               <tr>
+                  <td class="label">제목</td>
+                  <td>${vo.title }</td>
+               </tr>
+               <tr>
+                  <td class="label">내용</td>
+                  <td>
+                     <div class="view-content">
+                        ${fn:replace(vo.contents, newline, "<br/>") }
+                     </div>
+                  </td>
+               </tr>
+            </table>
+            <div class="bottom">
+               <a href="${pageContext.request.contextPath}/board">글목록</a>
+               <c:if test= "${!empty authUser }">
+               <a href="${pageContext.request.contextPath}/board?a=replyform&no=${vo.no }">답글 달기</a>
+               </c:if>
+               <c:if test="${vo.userNo == authUser.no }">
+               <a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no }">글삭제</a>
+               <a href="${pageContext.request.contextPath}/board?a=modifyform&no=${vo.no }">글수정</a>
+               </c:if>
+            </div>
+         </div>
+      </div>
+      <jsp:include page="/WEB-INF/views/includes/navigation.jsp" />
+      <jsp:include page="/WEB-INF/views/includes/footer.jsp" />
+   </div>
 </body>
 </html>
