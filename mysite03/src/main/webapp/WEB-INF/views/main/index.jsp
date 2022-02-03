@@ -15,10 +15,10 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath}/images/20220285321450.png" style='width:200px'>
-					<h2>안녕하세요. 김선혁 게시판입니다</h2>
+					<img id="profile" src="${pageContext.request.contextPath}${siteVo.profile}" style='width:200px'>
+					<h2>${siteVo.welcome }</h2>
 					<p>
-						반갑습니다<br>
+						${siteVo.description }<br>
 						<br><br>
 						<a href="${pageContext.request.contextPath}/guestbook">방명록</a>에 글 남기기<br>
 					</p>
