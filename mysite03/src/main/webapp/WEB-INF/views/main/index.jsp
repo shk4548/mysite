@@ -15,7 +15,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath}/assets/images/dog3.jpg" style='width:200px'>
+					<img id="profile" src="${pageContext.request.contextPath}/images/20220285321450.png" style='width:200px'>
 					<h2>안녕하세요. 김선혁 게시판입니다</h2>
 					<p>
 						반갑습니다<br>

@@ -43,6 +43,10 @@
 		</mvc:interceptor>
 
 	</mvc:interceptors>	
+
+	
+	<!-- mvc url-resource mapping -->
+	<mvc:resources mapping="/images/**" location="file:/upload-images/"/>
 	
 	<!-- ViewResolver -->
 	<bean id="viewResolver"
@@ -51,8 +55,9 @@
 		<property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+
 	
-		 <!-- 6. MessageSource -->
+	<!-- 6. MessageSource -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 	   <property name="basenames">
 	      <list>
