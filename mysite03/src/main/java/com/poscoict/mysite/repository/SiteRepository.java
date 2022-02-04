@@ -12,12 +12,12 @@ public class SiteRepository {
 	private SqlSession sqlSession;
 	
 	public boolean update(SiteVo vo) {
-		System.out.println(vo.getTitle() + "        " + vo.getWelcome() + "        " + vo.getDescription());
+		System.out.println(vo.getTitle() + "        " + vo.getWelcome() + "        " + vo.getDescription() + "    " + vo.getProfile());
 		return sqlSession.update("site.update",vo)==1;
 	}
 	
 	public SiteVo view() {
-		
+		System.out.println();
 		return sqlSession.selectOne("site.view");
 	}
 	

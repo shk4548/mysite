@@ -21,14 +21,12 @@ public class AdminController {
 	@Autowired
 	private SiteService siteService;
 	
-	@Autowired
-	private FileUploadService fileUploadService;
-	
 	
 	@RequestMapping("")
-	public String main(Model model) {
+	public String main() {
 	//	SiteVo vo = siteService.getSite();
 	//	model.addAttribute("vo",vo);
+		
 		return "admin/main";	
 	}
 	
@@ -49,14 +47,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/main/update", method = RequestMethod.POST)
-	public String update(SiteVo vo,
+	public String update(SiteVo siteVo,
 			@RequestParam(value = "inputFile") MultipartFile multipartFile) {
-	
-		System.out.println(vo);
-		String url = fileUploadService.restore(multipartFile);
-		vo.setProfile(url);
-		
-		siteService.updateSite(vo);
+		System.out.println(siteVo  + " 흐에에 ");
+		siteService.updateSite(siteVo,multipartFile);
 		return "redirect:/admin";
 	}
 }
