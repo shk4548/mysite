@@ -27,15 +27,18 @@ public class SiteService {
 	}
 	
 	// 업데이트
-	public Boolean updateSite(SiteVo siteVo,
-			@RequestParam(value = "inputFile") MultipartFile multipartFile) {
+	public Boolean updateSite(SiteVo siteVo, MultipartFile multipartFile) {
 		
 		String url = fileUploadService.restore(multipartFile);
-		siteVo.setProfile(url);
+		if(url != null) {
+			siteVo.setProfile(url);
+		}
 		
-		servletContext.setAttribute("siteVo", siteVo);
-		
-		System.out.println(siteVo);
-		return siteRepository.update(siteVo);
+		if(siteRepository.update(siteVo)) {
+			servletContext.setAttribute("siteVo", siteRepository.view());
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

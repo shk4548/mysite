@@ -24,7 +24,8 @@ public class AdminController {
 	
 	@RequestMapping("")
 	public String main() {
-	//	SiteVo vo = siteService.getSite();
+		SiteVo vo = siteService.getSite();
+
 	//	model.addAttribute("vo",vo);
 		
 		return "admin/main";	
