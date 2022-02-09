@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<!-- <select id= "getTotalCount" parameterType="string" resultType="long">
+		<choose>
+			<when test="_parameter == null or ''== __parameter ">
+				<![CDATA[
+				select count(*) from board
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				select count(*) from board where title like '%${_parameter}%' or contents like '%${_parameter}%'
+				]]>
+			</otherwise>
+		</choose>
+	</select> -->
+	
+	
+	<insert id="insert" parameterType="boardvo">
+		<![CDATA[
+		Insert into board values ( null , #{title} , #{contents} , 0, (select ifnull(max(g_no)+1,1) from board b) , 1 , 1 ,now(), #{userNo})
+		]]>
+	</insert>
+	
+	<insert id="replyWrite" parameterType="boardvo">
+		<![CDATA[
+		Insert into board values(null ,#{title},#{contents},0, #{groupNo} , #{orderNo} , #{depth}, now() , #{userNo})
+		]]>
+	</insert>
+	
+	<select id = "search" parameterType="string" resultType="boardvo">
+		<![CDATA[
+		select a.no as no , a.title as title, a.contents as contents, a.hit as hit , a.g_no as groupNo , a.o_no as orderNo, a.depth as depth , a.reg_date as regDate , a.user_no as userNo,
+		b.name as userName from board as a join user as b on a.user_no = b.no where a.title like '%${_parameter}%' or b.name like '%${_parameter}%' order by g_no desc, o_no asc
+		]]>
+	</select>
+	
+	<select id ="delete" parameterType="map" >
+		<![CDATA[
+		delete from board where no=#{no} and user_no= #{userNo}
+		]]>
+	</select>
+	
+	<select id="findByNo" parameterType = "long" resultType="boardvo">
+		<![CDATA[
+		select a.no as no , a.title as title, a.contents as contents, a.hit as hit , a.g_no as groupNo , a.o_no as orderNo, a.depth as depth , a.reg_date as regDate , a.user_no as userNo ,
+		b.name as userName from board as a join user as b on a.user_no = b.no where a.no= #{no} order by g_no desc, o_no asc
+		]]>
+	</select>
+	
+	<update id="update" parameterType="uservo">
+		<choose>
+			<when test = "title == null or ''==title">
+			<![CDATA[
+			update board set contents = #{contents} where no = #{no}
+			]]>
+			</when>
+			<when test = "contents == null or ''==contents">
+			<![CDATA[
+			update board set title = #{title} where no = #{no}
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+			update board set title = #{title} , contents = #{contents} where no = #{no}
+			]]>
+			</otherwise>
+		</choose>
+	</update>
+	
+	<update id="updateHit" parameterType="map">
+		<![CDATA[
+		update board set hit = #{hit} where no = #{no}
+		]]>
+	</update>
+	
+	<update id="updateReply" parameterType="map">
+		<![CDATA[
+		update board set o_no = (o_no + 1) where o_no > #{orderno} and g_no = #{groupno}
+		]]>
+	</update>
+</mapper>
