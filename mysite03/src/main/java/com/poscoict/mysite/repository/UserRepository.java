@@ -31,7 +31,6 @@ public class UserRepository {
 	}
 	
 	public UserVo findByEmailAndPassword(String email, String password) throws UserRepositoryException{
-
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("e", email);
@@ -40,6 +39,11 @@ public class UserRepository {
 		UserVo vo = sqlSession.selectOne("user.findByEmailAndPassword", map);
 
 		return vo;
+	}
+
+	public UserVo findByEmail(String email) {
+		return sqlSession.selectOne("user.findByEmail", email);
+
 	}
 
 
