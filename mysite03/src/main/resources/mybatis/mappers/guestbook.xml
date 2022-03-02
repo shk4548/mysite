@@ -13,15 +13,24 @@
 			]]>			
 		</selectKey>	
 	</insert>
-	<select id ="delete" parameterType="map" >
+	<delete id ="delete" parameterType="map" >
 		<![CDATA[
 		delete from guestbook where no=#{no} and password=#{p}
 		]]>			
-	</select>
+	</delete>
 	<select id="findAll" resultType="guestbookvo">
 		<![CDATA[
 		    select no, name, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as regDate, message
 		     from guestbook
+		order by reg_date desc
+		]]>
+	</select>
+	
+	<select id="findAll1"  parameterType="long"  resultType="guestbookvo">
+		<![CDATA[
+		    select no, name, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as regDate, message
+		     from guestbook 
+		     where no = #{no}
 		order by reg_date desc
 		]]>
 	</select>

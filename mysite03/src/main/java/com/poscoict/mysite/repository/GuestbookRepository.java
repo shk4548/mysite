@@ -20,14 +20,16 @@ public class GuestbookRepository {
 		return sqlSession.selectList("guestbook.findAll");
 	}
 	
+	public List<GuestbookVo> findAll1(Long no) {
+		return sqlSession.selectList("guestbook.findAll", no);
+	}
+	
 	public boolean delete(Long no, String password) {
-		int count = 0;
 		Map<String,Object> map = new HashMap<>();
 		map.put("no", no);
 		map.put("p", password);
 		
-		sqlSession.selectOne("guestbook.delete", map);
-		return count == 1;
+		return 1 == sqlSession.delete("guestbook.delete", map);
 	}
 	
 	public int insert(GuestbookVo vo) {
